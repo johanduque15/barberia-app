@@ -3,6 +3,7 @@ import Hero from "./components/common/Hero/Hero"
 import Services from "./components/common/Services/Services"
 import Barbers from "./components/common/Barbers/Barbers"
 import Footer from "./components/common/Footer/Footer"
+import ReservationCTA from "./components/common/ReservationCTA/ReservationCTA"
 
 function App() {
   return (
@@ -11,9 +12,9 @@ function App() {
         <Navbar />
         <Hero />
         <Services />
-        <Barbers />
+        <Barbers />     
+        <ReservationCTA />
         <Footer />
-
     </div>
   )
 }
