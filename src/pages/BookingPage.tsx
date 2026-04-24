@@ -2,7 +2,7 @@
 import Container from "../components/ui/Container/Container"
 import Section from "../components/ui/Section/Section"
 import Button from "../components/ui/Button/Button"
-import Input from "../components/ui/Input/input"
+import Input from "../components/ui/Input/Input"
 import Label from '../components/ui/Label/Label';
 import Select from "../components/ui/Select/Select"
 
