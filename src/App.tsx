@@ -5,6 +5,7 @@ import BookingPage from "./pages/BookingPage"
 import LoginPage from "./pages/LoginPage"
 import RegisterPage from "./pages/RegisterPage"
 import PublicLayout from "./layouts/PublicLayout/PublicLayout"
+import ProtectedRoute from "./components/common/ProtectedRoute/ProtectedRoute"
 
 function App() {
   return (
@@ -12,9 +13,16 @@ function App() {
       <Route element={<PublicLayout />} >
         <Route path="/" element={<HomePage />} />
         <Route path="/servicios" element={<ServicesPage />} />
-        <Route path="/reservar" element={<BookingPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="registro" element={<RegisterPage />} />
+        <Route
+          path="/reservar"
+          element={
+            <ProtectedRoute>
+              <BookingPage />
+            </ProtectedRoute>
+          }
+        />
       </Route>
     </Routes>
   )

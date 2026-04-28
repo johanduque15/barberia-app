@@ -1,15 +1,34 @@
 import type { SubmitEventHandler } from "react";
-import { Link } from "react-router";
+import { Link, useLocation, useNavigate } from "react-router";
 
 import Container from "../components/ui/Container/Container";
 import Section from "../components/ui/Section/Section";
 import Button from "../components/ui/Button/Button";
 import Input from "../components/ui/Input/Input";
 import Label from "../components/ui/Label/Label";
+import useAuth from "../hooks/useAuth";
+
+type LoginLocationState = {
+    from?: string
+}
 
 export default function LoginPage() {
+    const navigate = useNavigate()
+    const location = useLocation()
+    const {login} = useAuth()
+
+    const locationState = location.state as LoginLocationState | null
+    const redirectPath = locationState?.from ?? "/reservar"
+
+
     const handleSubmit: SubmitEventHandler<HTMLFormElement> = (event) => {
         event.preventDefault()
+
+        const formData = new FormData(event.currentTarget)
+        const email = String(formData.get("email") ?? "").trim()
+
+        login(email)
+        navigate(redirectPath, {replace: true})
     }
     return (
         <Section>
@@ -58,6 +77,7 @@ export default function LoginPage() {
                                     name="email"
                                     type="email"
                                     placeholder="tuemail@email.com"
+                                    required
                                 />
                             </div>
                             <div>
@@ -79,6 +99,7 @@ export default function LoginPage() {
                                     name="password"
                                     type="password"
                                     placeholder="Introduce tu contraseña"
+                                    required
                                 />
                             </div>
 
