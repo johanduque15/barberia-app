@@ -6,6 +6,7 @@ import LoginPage from "./pages/LoginPage"
 import RegisterPage from "./pages/RegisterPage"
 import PublicLayout from "./layouts/PublicLayout/PublicLayout"
 import ProtectedRoute from "./components/common/ProtectedRoute/ProtectedRoute"
+import MyAppointmentsPage from "./pages/MyAppointmensPage"
 
 function App() {
   return (
@@ -20,6 +21,15 @@ function App() {
           element={
             <ProtectedRoute>
               <BookingPage />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/mis-citas"
+          element={
+            <ProtectedRoute>
+              <MyAppointmentsPage />
             </ProtectedRoute>
           }
         />
