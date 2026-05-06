@@ -6,6 +6,7 @@ import LoginPage from "./pages/LoginPage"
 import RegisterPage from "./pages/RegisterPage"
 import PublicLayout from "./layouts/PublicLayout/PublicLayout"
 import ProtectedRoute from "./components/common/ProtectedRoute/ProtectedRoute"
+import AdminPage from "./pages/AdminPage"
 import MyAppointmentsPage from "./pages/MyAppointmensPage"
 
 function App() {
@@ -21,6 +22,15 @@ function App() {
           element={
             <ProtectedRoute>
               <BookingPage />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/admin"
+          element={
+            <ProtectedRoute>
+              <AdminPage />
             </ProtectedRoute>
           }
         />
