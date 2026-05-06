@@ -1,16 +1,27 @@
 
 import type { SubmitEventHandler } from "react";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 
 import Container from "../components/ui/Container/Container";
 import Section from "../components/ui/Section/Section";
 import Button from "../components/ui/Button/Button";
 import Label from "../components/ui/Label/Label";
 import Input from "../components/ui/Input/Input";
+import useAuth from "../hooks/useAuth";
 
-export default function RegisterPage() {
+
+export default function RegisterPage(){
+    const navigate = useNavigate()
+    const { login } = useAuth()
+
     const handleSubmit: SubmitEventHandler<HTMLFormElement> = (event) => {
         event.preventDefault()
+
+        const formData = new FormData(event.currentTarget)
+        const email = String(formData.get("email") ?? "").trim()
+
+        login(email)
+        navigate("/reservar", { replace: true})
     }
 
     return (
