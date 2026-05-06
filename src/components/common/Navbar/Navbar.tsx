@@ -27,6 +27,12 @@ export default function Navbar() {
                             Reservas
                         </NavLink>
 
+                        {isAuthenticated && (
+                            <NavLink to="/mis-citas" className={navLinkClass}>
+                                Mis citas
+                            </NavLink>
+                        )}
+
                         {isAuthenticated ? (
                             <button
                                 type="button"
@@ -67,6 +73,16 @@ export default function Navbar() {
                         >
                             Reservar
                         </NavLink>
+
+                        {isAuthenticated && (
+                            <NavLink 
+                                to="/mis-citas" 
+                                className={navLinkClass}
+                                onClick={() => setMenuOpen(false)}
+                                >
+                                Mis citas
+                            </NavLink>
+                        )}
 
                         {isAuthenticated ? (
                             <button
