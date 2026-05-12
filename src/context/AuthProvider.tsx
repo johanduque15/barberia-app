@@ -1,54 +1,83 @@
-import { useMemo, useState, type ReactNode } from "react"
-import {
-    AUTH_STORAGE_KEY,
-    AuthContext,
-    type AuthUser
-} from './AuthContext';
+import { useEffect, useState } from "react";
+import type { ReactNode } from "react";
+import api from "../services/api";
+import type { LoginResponse, RegisterPayload, User } from "../types/auth";
+import { AuthContext } from "./AuthContext";
 
+export function AuthProvider({ children }: { children: ReactNode }) {
+  const [user, setUser] = useState<User | null>(null);
 
-type AuthProviderProps = {
-    children: ReactNode
-}
+  const [token, setToken] = useState<string | null>(() =>
+    localStorage.getItem("token")
+  );
 
-function getInitialUser(): AuthUser | null {
-    const storedUser = localStorage.getItem(AUTH_STORAGE_KEY)
+  const [isLoading, setIsLoading] = useState(true);
 
-    if (!storedUser) {
-        return null
-    }
-    try {
-        return JSON.parse(storedUser) as AuthUser
-    } catch {
-        localStorage.removeItem(AUTH_STORAGE_KEY)
-        return null
-    }
-}
+  const isAuthenticated = Boolean(user && token);
 
-export function AuthProvider({ children }: AuthProviderProps) {
-    const [user, setUser] = useState<AuthUser | null>(getInitialUser)
+  useEffect(() => {
+    const loadUser = async () => {
+      const storedToken = localStorage.getItem("token");
 
+      if (!storedToken) {
+        setIsLoading(false);
+        return;
+      }
 
-    function login(email: string) {
-        const nextUser = { email }
+      try {
+        const response = await api.get<{ user: User }>("/auth/me");
+        setUser(response.data.user);
+        setToken(storedToken);
+      } catch {
+        localStorage.removeItem("token");
+        setToken(null);
+        setUser(null);
+      } finally {
+        setIsLoading(false);
+      }
+    };
 
-        setUser(nextUser)
-        localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(nextUser))
-    }
+    loadUser();
+  }, []);
 
-    function logout() {
-        setUser(null)
-        localStorage.removeItem(AUTH_STORAGE_KEY)
-    }
+  const login = async (email: string, password: string) => {
+    const response = await api.post<LoginResponse>("/auth/login", {
+      email,
+      password,
+    });
 
-    const value = useMemo(
-        () => ({
-            user,
-            isAuthenticated: Boolean(user),
-            login,
-            logout,
-        }),
-        [user]
-    )
+    localStorage.setItem("token", response.data.token);
+    setToken(response.data.token);
+    setUser(response.data.user);
+  };
 
-    return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
+  const register = async (payload: RegisterPayload) => {
+    const response = await api.post<LoginResponse>("/auth/register", payload);
+
+    localStorage.setItem("token", response.data.token);
+    setToken(response.data.token);
+    setUser(response.data.user);
+  };
+
+  const logout = () => {
+    localStorage.removeItem("token");
+    setToken(null);
+    setUser(null);
+  };
+
+  return (
+    <AuthContext.Provider
+      value={{
+        user,
+        token,
+        isAuthenticated,
+        isLoading,
+        login,
+        register,
+        logout,
+      }}
+    >
+      {children}
+    </AuthContext.Provider>
+  );
 }
