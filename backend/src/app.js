@@ -7,7 +7,7 @@ const authRoutes = require("./routes/auth.routes");
 const appointmentRoutes = require("./routes/appointment.routes");
 const serviceRoutes = require("./routes/service.routes");
 const barberRoutes = require("./routes/barber.routes");
-
+const adminRoutes = require("./routes/admin.routes");
 
 app.use(
     cors({
@@ -21,6 +21,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/appointments", appointmentRoutes);
 app.use("/api/services", serviceRoutes);
 app.use("/api/barbers", barberRoutes);
+app.use("/api/admin",adminRoutes);
 
 app.get("/api/health", (req, res) => {
     res.status(200).json({
