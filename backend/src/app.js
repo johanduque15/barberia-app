@@ -5,6 +5,9 @@ const db = require("./config/db");
 const app = express();
 const authRoutes = require("./routes/auth.routes");
 const appointmentRoutes = require("./routes/appointment.routes");
+const serviceRoutes = require("./routes/service.routes");
+const barberRoutes = require("./routes/barber.routes");
+
 
 app.use(
     cors({
@@ -16,6 +19,8 @@ app.use(express.json());
 app.use("/api/auth", authRoutes);
 
 app.use("/api/appointments", appointmentRoutes);
+app.use("/api/services", serviceRoutes);
+app.use("/api/barbers", barberRoutes);
 
 app.get("/api/health", (req, res) => {
     res.status(200).json({
