@@ -1,9 +1,10 @@
 import Container from '../../ui/Container/Container'
 import Button from '../../ui/Button/Button'
 import HeroImage from "../../../assets/barber-shop3.jpg"
+import { Link } from 'react-router'
 
-export default function Hero(){
-    return(
+export default function Hero() {
+    return (
         <section className="py-20 md:py-28">
             <Container>
                 <div className='grid gap-10 md:grid-cols-2 items-center'>
@@ -13,17 +14,18 @@ export default function Hero(){
                         </h1>
 
                         <p className='text-barber-gray text-lg max-w-xl'>
-                            Reserva tu cita online 
+                            Reserva tu cita online
                         </p>
-
-                        <Button>
-                            Reservar cita
-                        </Button>
+                        <Link to="/reservar">
+                            <Button>
+                                Reservar cita
+                            </Button>
+                        </Link>
                     </div>
-                    <div    className='relative'>
-                        <img 
-                            src={HeroImage} 
-                            alt="silla de barberia" 
+                    <div className='relative'>
+                        <img
+                            src={HeroImage}
+                            alt="silla de barberia"
                             className='rounded-lg object-cover h-[420] w-full'
                         />
                     </div>

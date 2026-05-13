@@ -2,6 +2,7 @@ import { Link, NavLink } from "react-router";
 import Container from "../../ui/Container/Container"
 import { useState } from "react"
 import useAuth from "../../../hooks/useAuth";
+import logoBarberia from "../../../assets/Duque´s barber shop.png";
 
 export default function Navbar() {
     const [menuOpen, setMenuOpen] = useState(false);
@@ -15,16 +16,20 @@ export default function Navbar() {
             <Container>
                 <div className="flex items-center justify-between h-16">
                     <Link to="/" className="text-xl font-bold text-barber-gold">
-                        Barberia
+                        <img 
+                            src={logoBarberia} 
+                            alt="Duque's Barber Shop" 
+                            className="h-12 w-auto object-contain"
+                            />
                     </Link>
 
                     <nav className="hidden md:flex gap-8 text-sm font-medium">
-                        <NavLink to="/servicios" className={navLinkClass}>
+                        {/* <NavLink to="/servicios" className={navLinkClass}>
                             Servicios
-                        </NavLink>
+                        </NavLink> */}
 
                         <NavLink to="/reservar" className={navLinkClass}>
-                            Reservas
+                            Reservar
                         </NavLink>
 
                         {isAuthenticated && (

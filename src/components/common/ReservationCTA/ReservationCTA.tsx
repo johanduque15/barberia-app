@@ -1,9 +1,10 @@
 import Container from "../../ui/Container/Container";
 import Section from "../../ui/Section/Section";
 import Button from '../../ui/Button/Button';
+import { Link } from "react-router";
 
-export default function ReservationCTA(){
-    return(
+export default function ReservationCTA() {
+    return (
         <Section>
             <Container>
                 <div className="rounded-lg border border-barber-gold bg-zinc-900 px-6 py-12 text-center md:px-12">
@@ -16,9 +17,11 @@ export default function ReservationCTA(){
                     </p>
 
                     <div className="mt-8">
-                        <Button>
-                            Reservar cita
-                        </Button>
+                        <Link to="/reservar">
+                            <Button>
+                                Reservar cita
+                            </Button>
+                        </Link>
                     </div>
                 </div>
             </Container>
