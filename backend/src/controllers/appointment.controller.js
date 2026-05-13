@@ -1,5 +1,56 @@
 const db = require("../config/db");
 
+const MAX_BOOKING_DAYS_AHEAD = 90;
+
+const getTodayDateString = () => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    return today.toISOString().slice(0, 10);
+};
+
+const getMaxBookingDateString = () => {
+    const maxDate = new Date();
+    maxDate.setHours(0, 0, 0, 0);
+    maxDate.setDate(maxDate.getDate() + MAX_BOOKING_DAYS_AHEAD);
+    return maxDate.toISOString().slice(0, 10);
+};
+
+const validateAppointmentDate = (fecha) => {
+    const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
+
+    if (!dateRegex.test(fecha)) {
+        return "La fecha no tiene un formato válido";
+    }
+
+    const today = getTodayDateString();
+    const maxDate = getMaxBookingDateString();
+
+    if (fecha < today) {
+        return "No se puede reservar una cita en una fecha anterior a hoy";
+    }
+
+    if (fecha > maxDate) {
+        return `No se puede reservar con más de ${MAX_BOOKING_DAYS_AHEAD} días de antelación`;
+    }
+
+    return null;
+};
+
+const isSaturdayDate = (fecha) => {
+    const date = new Date(`${fecha}T00:00:00`);
+    return date.getDay() === 6;
+};
+
+const validateAppointmentSchedule = (fecha, hora) => {
+    const normalizedHour = hora.slice(0, 5);
+
+    if (isSaturdayDate(fecha) && normalizedHour >= "14:00") {
+        return "Los sábados solo se permiten citas antes de las 14:00";
+    }
+
+    return null;
+};
+
 const createAppointment = async (req, res) => {
     try {
         const { fecha, hora, barbero_id, servicio_id } = req.body;
@@ -8,6 +59,20 @@ const createAppointment = async (req, res) => {
         if (!fecha || !hora || !barbero_id || !servicio_id) {
             return res.status(400).json({
                 message: "Fecha, hora, barbero y servicio son obligatorios",
+            });
+        }
+
+        const dateValidationError = validateAppointmentDate(fecha);
+        if (dateValidationError) {
+            return res.status(400).json({
+                message: dateValidationError,
+            });
+        }
+
+        const scheduleValidationError = validateAppointmentSchedule(fecha, hora);
+        if (scheduleValidationError) {
+            return res.status(400).json({
+                message: scheduleValidationError,
             });
         }
 
@@ -76,7 +141,7 @@ const getMyAppointments = async (req, res) => {
         const cliente_id = req.user.usuario_id;
 
         const result = await db.query(
-        `SELECT 
+            `SELECT 
           c.cita_id,
           TO_CHAR(c.fecha, 'YYYY-MM-DD') AS fecha,
           c.hora,
@@ -117,6 +182,21 @@ const updateAppointment = async (req, res) => {
         if (!fecha || !hora || !barbero_id || !servicio_id) {
             return res.status(400).json({
                 message: "Fecha, hora, barbero y servicio son obligatorios",
+            });
+        }
+
+        const dateValidationError = validateAppointmentDate(fecha);
+        if (dateValidationError) {
+            return res.status(400).json({
+                message: dateValidationError,
+            });
+        }
+
+        const scheduleValidationError = validateAppointmentSchedule(fecha, hora);
+
+        if (scheduleValidationError) {
+            return res.status(400).json({
+                message: scheduleValidationError,
             });
         }
 
