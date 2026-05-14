@@ -2,7 +2,7 @@ import { Link, NavLink } from "react-router";
 import Container from "../../ui/Container/Container"
 import { useState } from "react"
 import useAuth from "../../../hooks/useAuth";
-import logoBarberia from "../../../assets/Duque´s barber shop.png";
+import logoBarberia from "../../../assets/Duques barber shop.png";
 
 export default function Navbar() {
     const [menuOpen, setMenuOpen] = useState(false);
